@@ -324,19 +324,89 @@ calculate_area(6, 5)
 
 
 
-# class child_vector(Vector):
-#     def __init__(self, x, y, z):
-#         super.__init__(x, y, z)
+# meta class და __new__ magic method
+class new_class:
+
+    def __init__(self):
+        print("call __init__ method")
+
+
+    def __new__(cls):
+        print("call __new__ method")
+
+
+class_element = new_class()
+
+
+
+
+# class NewClass:
+#     # კლასის შექმნისას პირველი ეშვება __new__ მეთოდი, რომელსაც გადავცემთ cls კლასს მიმართავს
+#     def __new__(cls, *args, **kwargs):
+#         print("call new method")
+#         return super().__new__(cls)
+#     #
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.age = age
+#         print("Class __init__ constructor")
 #
 #
-#     def __add__(self, other):
-#         return child_vector(self.x + other.x, self.y + other.y, self.z + other.z)
 #
-#     def __repr__(self):
-#         return f"child_vector({self.x}, {self.y}, {self.z})"
+# new = NewClass("makho", "22")
+# new.lastname = "orkiashvili"
+# print(new.lastname)
 #
-# vector2 = child_vector(1, 2, 3)
+# # მეტა კლასი არის კლასების კლასი, როგორ წარმოიშვას ობიექტისგან კლასი, და კლასიდან კლასი და კლასიდან ობიექტი დამოკიდებულია მეტაკლასებზე,
+# # რომელიც არის ჩაშენებული პითონში, მეტა კლასის შესაქმნელად საჭიროა კლასი გავხადოთ type კლასის შვილობილი
+# # type არის პითონში ჩაშენებული კლასი, რომლის შვილობილიც ხდება ყველა ის კლაში რომელსაც შემდგომში ჩვენ შევქმნით
+# class MetaClass(type):
+#     # __new__ მეთოდს გადაეცემა 3 ატრიბუტი
+#     # name - აბრუნებს უშუალოდ იმ კლასის სახელს რომელსაც metaclassში გავუწერთ იმ კლასის სახელს, რომელშიც new შევქმენით
+#     def __new__(cls, name, bases, attrs):
+#         print(name)
+#         # იმ კლასის სახელს აბრუნებს რომელსაც metaclass= classname, metaclassში გადავცემთ იმ კლასის სახელს
+#         # სადაც __new__ მეთოდს გადავცემთ
 #
-# print(vector1 + vector2)
+#         print(bases)
+#         # ტაპლის სახით აბრუნებს მშობელი კლასის სახელებს თუკი ყავს, თუ მშობელი კლასი არ ყავს ცარიელ ტაპლს დაააბრუნებს
+#
+#         print(attrs)
+#         # დააბრუნებს დიქტის სახით, ატრიბუტის სახელს, მისამართს და ატრიბუტების მნიშვნელობას
+#
+#         # new მეთოდს უნდა დავაბრუნებინოთ super საკვანძო სიტყვით gadacemuli 3 atributi
+#         return super().__new__(cls, name, bases, attrs)
+#
+#
+# class NewClass(metaclass=MetaClass):
+#     def __init__(self, first_name, last_name):
+#         self.first_name = first_name
+#         self.last_name = last_name
+#
+#     def call(self):
+#         return self.first_name + " " + self.last_name
+#
+#
+# NewClass_child = NewClass("makho", 'okriashvili')
+#
+# print(NewClass_child.call())
+#
+#
+# # metaclass ებს ვიყენებთ - კლასებისათვის ქმედების შესაცვლელად,
+# მაგ:
+class MyMeta(type):
+    def __new__(cls, name, bases, attrs):
+        attrs["created_by"] = "admin"
+        return super().__new__(cls, name, bases, attrs)
+
+
+class my_meta(metaclass=MyMeta):
+    pass
+
+obj = my_meta
+print(obj.created_by)
+
+# მსგავსად შეგვიძლია დავისეტოთ მნიშვნელობა სხვა კლასებსაც, ნაცვლად იმისა რომ ხელით გაგვეწერა ყველა კლასში კონკრეტული ინფორმაცია,
+# შევქმენით ერთხელ და metaclassის გამოძახებით დავუსეტეთ კლასებს მნიშვნელობა
 
 
